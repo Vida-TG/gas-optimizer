@@ -27,6 +27,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Monitor gas prices every second
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 
@@ -44,13 +45,16 @@ func main() {
 				log.Printf("Error getting gas price: %v", err)
 				continue
 			}
+
 			gasPriceGwei := float64(gasPrice.Int64()) / 1e9
 			
+			// Update moving average
 			prices = append(prices, gasPriceGwei)
 			if len(prices) > movingAverageWindow {
 				prices = prices[1:]
 			}
 			
+			// Calculate average
 			var sum float64
 			for _, p := range prices {
 				sum += p
