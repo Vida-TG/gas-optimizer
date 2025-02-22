@@ -85,6 +85,6 @@ func (m *Monitor) Stop() {
 
 func (m *Monitor) printStatus(currentPrice float64, recommendation string) {
 	avg := m.analyzer.CalculateMovingAverage(m.prices, 10)
-	fmt.Printf("\rCurrent: %.2f Gwei | 10s Avg: %.2f Gwei | %s", 
+	fmt.Printf("\rCurrent: %.2f Gwei | 10s Avg: %.2f Gwei | %s    \n", 
 		currentPrice, avg, recommendation)
 } 
