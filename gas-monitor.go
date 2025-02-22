@@ -30,6 +30,8 @@ func main() {
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
 
+	fmt.Println("Starting Ethereum gas price monitor...")
+	fmt.Println("Checking prices every second...")
 
 	var prices []float64
 	const movingAverageWindow = 10
@@ -42,10 +44,19 @@ func main() {
 				log.Printf("Error getting gas price: %v", err)
 				continue
 			}
-
 			gasPriceGwei := float64(gasPrice.Int64()) / 1e9
 			
+			prices = append(prices, gasPriceGwei)
+			if len(prices) > movingAverageWindow {
+				prices = prices[1:]
+			}
 			
+			var sum float64
+			for _, p := range prices {
+				sum += p
+			}
+			avg := sum / float64(len(prices))
+
 			fmt.Printf("\rCurrent gas price: %.2f Gwei | 10s Average: %.2f Gwei", 
 				gasPriceGwei, avg)
 		}
